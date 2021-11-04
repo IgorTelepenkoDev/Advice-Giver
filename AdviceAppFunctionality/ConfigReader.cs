@@ -6,7 +6,7 @@ using System.IO;
 namespace AdviceAppFunctionality
 {
     // Reads configuration from standard format of '.ini' files
-    public class ConfigReader
+    class ConfigReader
     {
         Dictionary<string, string> confValues;
 

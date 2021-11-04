@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace AdviceAppFunctionality
+namespace AdviceAppFunctionality.AdviceManagement
 {
-    class AdviceTranslator
+    public class AdviceTranslator
     {
         public string TranslateAdvice(string advice, string baseLanguageSymb, string targetLanguageSymb)
         {

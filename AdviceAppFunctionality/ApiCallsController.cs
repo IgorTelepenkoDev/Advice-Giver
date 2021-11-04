@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace AdviceAppFunctionality
 {
-    public class ApiCallsController
+    class ApiCallsController
     {
         public string HttpGetRelease(string url)
         {

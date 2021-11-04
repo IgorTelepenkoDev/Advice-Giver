@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AdviceAppFunctionality
+namespace AdviceAppFunctionality.AdviceManagement
 {
     public class AdviceReceiver
     {

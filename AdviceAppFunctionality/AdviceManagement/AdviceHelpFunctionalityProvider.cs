@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace AdviceAppFunctionality
+namespace AdviceAppFunctionality.AdviceManagement
 {
-    class NewAdviceJsonContentTemplate
+    internal class NewAdviceJsonContentTemplate
     {
         public AdviceJsonInternalContentTemplate slip { get; set; }
     }
 
-    class AdviceJsonInternalContentTemplate
+    internal class AdviceJsonInternalContentTemplate
     {
         public int id { get; set; }
         public string advice { get; set; }
     }
 
-    class TranslatedAdviceJsonContentTemplate
+    internal class TranslatedAdviceJsonContentTemplate
     {
         public string translatedText { get; set; }
     }
 
-    class AdviceHelpFunctionalityProvider
+    internal class AdviceHelpFunctionalityProvider
     {
         private const string ConfigFileName = "config.ini";
         private const string ConfigAdviceSection = "advice_source";
