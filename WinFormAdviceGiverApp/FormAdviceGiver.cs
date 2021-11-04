@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdviceAppFunctionality.AdviceManagement;
@@ -23,8 +24,21 @@ namespace WinFormAdviceGiverApp
         private void buttonGenerateAdvice_Click(object sender, EventArgs e)
         {
             piecesOfAdvice = new Dictionary<int, string>();
-            textBoxPiecesOfAdvice.Clear();
+            
+            Thread adviceProvider = new Thread(new ThreadStart(() =>
+            {
+                GeneratePiecesOfAdvice();
+                DisplayPiecesOfAdviceWithTranslation();
+            }));
 
+            adviceProvider.IsBackground = true;
+            textBoxPiecesOfAdvice.Clear();
+            adviceProvider.Start();
+            buttonGenerateAdvice.Enabled = false;
+        }
+
+        private void GeneratePiecesOfAdvice()
+        {
             int neededAdviceQuantity = (int)numericUpDownAdviceQuantity.Value;
             int currentAdviceQuantity = piecesOfAdvice.Count;
 
@@ -32,7 +46,7 @@ namespace WinFormAdviceGiverApp
             while (currentAdviceQuantity != neededAdviceQuantity)
             {
                 var receivedAdvice = adviceReceiver.GetNewAdvice();
-                if(!receivedAdvice.Equals(default(KeyValuePair<int,string>)))
+                if (!receivedAdvice.Equals(default(KeyValuePair<int, string>)))
                     if (!piecesOfAdvice.ContainsKey(receivedAdvice.Key))
                     {
                         piecesOfAdvice.Add(receivedAdvice.Key, receivedAdvice.Value);
@@ -42,17 +56,25 @@ namespace WinFormAdviceGiverApp
             // Sorting according to the advice ID
             piecesOfAdvice = piecesOfAdvice.OrderBy(obj => obj.Key).
                 ToDictionary(obj => obj.Key, obj => obj.Value);
+        }
 
-            var adviceTranslator = new AdviceTranslator();
-            foreach (var advice in piecesOfAdvice)
-            {
-                textBoxPiecesOfAdvice.Text += advice.Value;
-                textBoxPiecesOfAdvice.Text += Environment.NewLine;
-                var translatedAdvice = adviceTranslator.TranslateAdvice(advice.Value);
-                textBoxPiecesOfAdvice.Text += translatedAdvice;
-                if(!advice.Equals(piecesOfAdvice.Last()))
-                    textBoxPiecesOfAdvice.Text += Environment.NewLine + Environment.NewLine;
-            }
+        private void DisplayPiecesOfAdviceWithTranslation()
+        {
+            Invoke(new MethodInvoker(delegate 
+            { 
+                var adviceTranslator = new AdviceTranslator();
+                foreach (var advice in piecesOfAdvice)
+                {
+                    textBoxPiecesOfAdvice.Text += advice.Value;
+                    textBoxPiecesOfAdvice.Text += Environment.NewLine;
+                    var translatedAdvice = adviceTranslator.TranslateAdvice(advice.Value);
+                    textBoxPiecesOfAdvice.Text += translatedAdvice;
+                    if (!advice.Equals(piecesOfAdvice.Last()))
+                        textBoxPiecesOfAdvice.Text += Environment.NewLine + Environment.NewLine;
+                }
+
+                buttonGenerateAdvice.Enabled = true;
+            }));
         }
     }
 }
