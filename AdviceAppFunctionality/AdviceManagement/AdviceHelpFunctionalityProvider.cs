@@ -52,7 +52,7 @@ namespace AdviceAppFunctionality.AdviceManagement
             return null;
         }
 
-        public Dictionary<int, string> ParseJsonAdvice(string adviceJson)
+        public KeyValuePair<int, string> ParseJsonAdvice(string adviceJson)
         {
             try
             {
@@ -60,11 +60,11 @@ namespace AdviceAppFunctionality.AdviceManagement
                 int id = deserializedAdviceData.slip.id;
                 string advice = deserializedAdviceData.slip.advice;
 
-                return new Dictionary<int, string>() {{id, advice}};
+                return new KeyValuePair<int, string>(id, advice);
             }
             catch (NullReferenceException)
             {
-                return null;
+                return default;
             }
         }
 
