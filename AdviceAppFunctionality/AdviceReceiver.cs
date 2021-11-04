@@ -2,13 +2,13 @@
 
 namespace AdviceAppFunctionality
 {
-    class AdviceReceiver
+    public class AdviceReceiver
     {
         public Dictionary<int,string> GetNewAdvice()
         {
             var apiCaller = new ApiCallsController();
 
-            var adviceFunctionalityHelper = new AdviceReceiveHelper();
+            var adviceFunctionalityHelper = new AdviceHelpFunctionalityProvider();
             var adviceGeneratorUrl = adviceFunctionalityHelper.GetAdviceGeneratorUrl();
 
             if (adviceGeneratorUrl == null)
