@@ -4,7 +4,11 @@ namespace AdviceAppFunctionality.AdviceManagement
 {
     public class AdviceTranslator
     {
-        public string TranslateAdvice(string advice, string baseLanguageSymb, string targetLanguageSymb)
+        private const string sourceLanguage = "en";
+        private const string targetLanguage = "pl";
+
+        public string TranslateAdvice(string advice, 
+            string baseLanguageSymb = sourceLanguage, string targetLanguageSymb = targetLanguage)
         {
             var apiCaller = new ApiCallsController();
 
