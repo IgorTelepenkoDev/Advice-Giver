@@ -39,6 +39,9 @@ namespace WinFormAdviceGiverApp
                         currentAdviceQuantity++;
                     }
             }
+            // Sorting according to the advice ID
+            piecesOfAdvice = piecesOfAdvice.OrderBy(obj => obj.Key).
+                ToDictionary(obj => obj.Key, obj => obj.Value);
 
             var adviceTranslator = new AdviceTranslator();
             foreach (var advice in piecesOfAdvice)
