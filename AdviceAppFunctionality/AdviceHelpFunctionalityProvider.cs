@@ -16,11 +16,16 @@ namespace AdviceAppFunctionality
         public string advice { get; set; }
     }
 
-    class AdviceReceiveHelper
+    class TranslatedAdviceJsonContentTemplate
+    {
+        public string translatedText { get; set; }
+    }
+
+    class AdviceHelpFunctionalityProvider
     {
         private const string ConfigFileName = "config.ini";
         private const string ConfigAdviceSection = "advice_source";
-        //private const string ConfigTranslateSection = "translate_source";
+        private const string ConfigTranslateSection = "translate_source";
         private const string ConfigParamUrlAddress = "url";
 
         public string GetAdviceGeneratorUrl()
@@ -35,17 +40,45 @@ namespace AdviceAppFunctionality
             return null;
         }
 
-        public Dictionary<int, string> ParseJsonAdvice(string adviceInJson)
+        public string GetAdviceTranslatorUrl()
+        {
+            var configFilePath = GetConfigFilePath();
+            if (configFilePath != null)
+            {
+                var configReceiver = new ConfigReader(configFilePath, ConfigTranslateSection);
+                return configReceiver.GetValue(ConfigParamUrlAddress);
+            }
+
+            return null;
+        }
+
+        public Dictionary<int, string> ParseJsonAdvice(string adviceJson)
         {
             try
             {
-                var deserializedAdviceData = JsonConvert.DeserializeObject<NewAdviceJsonContentTemplate>(adviceInJson);
+                var deserializedAdviceData = JsonConvert.DeserializeObject<NewAdviceJsonContentTemplate>(adviceJson);
                 int id = deserializedAdviceData.slip.id;
                 string advice = deserializedAdviceData.slip.advice;
 
                 return new Dictionary<int, string>() {{id, advice}};
             }
-            catch (Exception)   // Might be separated into several specific cases
+            catch (NullReferenceException)
+            {
+                return null;
+            }
+        }
+
+        public string ParseJsonTranslatedAdvice(string translatedAdviceJson)
+        {
+            try
+            {
+                var deserializedTranslatedAdviceData = 
+                    JsonConvert.DeserializeObject<TranslatedAdviceJsonContentTemplate>(translatedAdviceJson);
+                string translatedResult = deserializedTranslatedAdviceData.translatedText;
+
+                return translatedResult;
+            }
+            catch (NullReferenceException)
             {
                 return null;
             }
